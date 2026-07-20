@@ -1,9 +1,9 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
+import { Download, Plus, Trash2 } from "lucide-react";
 import { api, apiErrorMessage } from "../api/client.ts";
 import type { Category, Transaction } from "../api/types.ts";
-import { formatMoney } from "../lib/format.ts";
+import { LOCALE, formatMoney } from "../lib/format.ts";
 import { categoryColor } from "../lib/palette.ts";
 import { useTheme } from "../context/ThemeContext.tsx";
 import MonthPicker, { currentYearMonth } from "../components/MonthPicker.tsx";
@@ -62,6 +62,19 @@ export default function TransactionsPage() {
     createMutation.mutate(form);
   }
 
+  async function exportCsv() {
+    const res = await api.get<Blob>("/transactions/export", {
+      params: { year: ym.year, month: ym.month },
+      responseType: "blob",
+    });
+    const url = URL.createObjectURL(res.data);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `transacciones-${ym.year}-${String(ym.month).padStart(2, "0")}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   const grouped = useMemo(() => {
     const byDate = new Map<string, Transaction[]>();
     for (const t of transactions) {
@@ -77,6 +90,17 @@ export default function TransactionsPage() {
         <h1 className="text-2xl font-semibold">Transacciones</h1>
         <div className="flex items-center gap-3">
           <MonthPicker value={ym} onChange={setYm} />
+          <Button
+            variant="ghost"
+            onClick={exportCsv}
+            disabled={transactions.length === 0}
+            title="Exportar el mes a CSV"
+          >
+            <span className="flex items-center gap-1.5">
+              <Download className="size-4" aria-hidden />
+              CSV
+            </span>
+          </Button>
           <Button onClick={() => setShowForm((v) => !v)}>
             <span className="flex items-center gap-1.5">
               <Plus className="size-4" aria-hidden />
@@ -163,7 +187,7 @@ export default function TransactionsPage() {
           {grouped.map(([date, items]) => (
             <Card key={date}>
               <h2 className="mb-3 text-sm font-medium text-(--ink-secondary)">
-                {new Date(`${date}T00:00:00`).toLocaleDateString("es-MX", {
+                {new Date(`${date}T00:00:00`).toLocaleDateString(LOCALE, {
                   weekday: "long",
                   day: "numeric",
                   month: "long",

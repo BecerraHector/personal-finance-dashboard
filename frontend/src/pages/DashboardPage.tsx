@@ -16,7 +16,7 @@ import {
 import { AlertTriangle } from "lucide-react";
 import { api } from "../api/client.ts";
 import type { Summary } from "../api/types.ts";
-import { formatMoney, shortMonthLabel } from "../lib/format.ts";
+import { formatCompact, formatMoney, shortMonthLabel } from "../lib/format.ts";
 import { categoryColor } from "../lib/palette.ts";
 import { useTheme } from "../context/ThemeContext.tsx";
 import MonthPicker, { currentYearMonth } from "../components/MonthPicker.tsx";
@@ -171,9 +171,7 @@ export default function DashboardPage() {
                       tickLine={false}
                       axisLine={false}
                       tick={{ fill: chart.tick, fontSize: 12 }}
-                      tickFormatter={(v: number) =>
-                        Intl.NumberFormat("es-MX", { notation: "compact" }).format(v)
-                      }
+                      tickFormatter={formatCompact}
                     />
                     <Tooltip
                       formatter={(v) => formatMoney(Number(v))}

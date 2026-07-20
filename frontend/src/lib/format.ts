@@ -1,10 +1,18 @@
-const currency = new Intl.NumberFormat("es-MX", {
+export const LOCALE = "es-CL";
+export const CURRENCY = "CLP";
+
+// CLP no usa decimales: Intl redondea al peso entero
+const currency = new Intl.NumberFormat(LOCALE, {
   style: "currency",
-  currency: "MXN",
+  currency: CURRENCY,
 });
 
 export function formatMoney(value: number | string): string {
   return currency.format(typeof value === "string" ? Number(value) : value);
+}
+
+export function formatCompact(value: number): string {
+  return Intl.NumberFormat(LOCALE, { notation: "compact" }).format(value);
 }
 
 export const MONTH_NAMES = [

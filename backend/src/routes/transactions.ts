@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "../lib/prisma.js";
 import { HttpError } from "../middleware/error.js";
 import { monthRange } from "../lib/dates.js";
+import { transactionsToCsv } from "../lib/csv.js";
 
 const router = Router();
 
@@ -38,6 +39,35 @@ router.get("/", async (req, res) => {
     orderBy: { date: "desc" },
   });
   res.json(transactions);
+});
+
+router.get("/export", async (req, res) => {
+  const { year, month, categoryId } = listQuerySchema.parse(req.query);
+  const { start, end } = monthRange(year, month);
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId: req.userId,
+      date: { gte: start, lt: end },
+      ...(categoryId ? { categoryId } : {}),
+    },
+    include: { category: { select: { name: true, type: true } } },
+    orderBy: { date: "asc" },
+  });
+  const csv = transactionsToCsv(
+    transactions.map((t) => ({
+      date: t.date,
+      categoryName: t.category.name,
+      type: t.category.type,
+      description: t.description,
+      amount: t.amount.toNumber(),
+    })),
+  );
+  const filename = `transacciones-${year}-${String(month).padStart(2, "0")}.csv`;
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
+  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+  // BOM para que Excel detecte UTF-8 (tildes en categorías/descripciones)
+  const bom = String.fromCharCode(0xfeff);
+  res.send(bom + csv);
 });
 
 router.post("/", async (req, res) => {

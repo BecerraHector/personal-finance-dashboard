@@ -13,7 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Lightbulb, TrendingUp } from "lucide-react";
 import { api } from "../api/client.ts";
 import type { Summary } from "../api/types.ts";
 import { formatCompact, formatMoney, shortMonthLabel } from "../lib/format.ts";
@@ -100,6 +100,30 @@ export default function DashboardPage() {
             <StatTile label="Gastos del mes" value={summary.expense} />
             <StatTile label="Balance" value={summary.balance} tone="auto" />
           </div>
+
+          {summary.insights.length > 0 && (
+            <Card>
+              <h2 className="mb-3 text-sm font-medium text-(--ink-secondary)">Insights del mes</h2>
+              <ul className="space-y-2">
+                {summary.insights.map((insight) => {
+                  const style = {
+                    warning: { Icon: AlertTriangle, className: "text-(--danger)" },
+                    good: { Icon: TrendingUp, className: "text-(--income)" },
+                    info: { Icon: Lightbulb, className: "text-(--accent-text)" },
+                  }[insight.severity];
+                  return (
+                    <li key={insight.message} className="flex items-start gap-2.5 text-sm">
+                      <style.Icon
+                        className={`mt-0.5 size-4 shrink-0 ${style.className}`}
+                        aria-hidden
+                      />
+                      <span className="text-(--ink-secondary)">{insight.message}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Card>
+          )}
 
           <div className="grid gap-4 lg:grid-cols-2">
             <Card>

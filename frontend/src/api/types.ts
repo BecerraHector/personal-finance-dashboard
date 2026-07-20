@@ -90,4 +90,11 @@ export interface Summary {
     spent: number;
   }[];
   history: { year: number; month: number; income: number; expense: number }[];
+  insights: Insight[];
+}
+
+export interface Insight {
+  type: string;
+  severity: "good" | "warning" | "info";
+  message: string;
 }

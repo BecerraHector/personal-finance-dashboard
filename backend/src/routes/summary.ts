@@ -4,6 +4,7 @@ import { prisma } from "../lib/prisma.js";
 import { monthRange } from "../lib/dates.js";
 import { buildHistory, buildMonthSummary } from "../lib/summary.js";
 import { materializeRecurring } from "../lib/materializeRecurring.js";
+import { buildInsights } from "../lib/insights.js";
 
 const router = Router();
 
@@ -31,7 +32,7 @@ router.get("/", async (req, res) => {
     }),
     prisma.transaction.findMany({
       where: { userId: req.userId, date: { gte: historyStart, lt: end } },
-      include: { category: { select: { type: true } } },
+      include: { category: { select: { type: true, name: true } } },
     }),
   ]);
 
@@ -60,7 +61,50 @@ router.get("/", async (req, res) => {
     HISTORY_MONTHS,
   );
 
-  res.json({ year, month, ...summary, history });
+  // Desglose del mes anterior (ya está en las transacciones del historial)
+  const prevDate = new Date(Date.UTC(year, month - 2, 1));
+  const prevYear = prevDate.getUTCFullYear();
+  const prevMonth = prevDate.getUTCMonth() + 1;
+  const prevByCategory = new Map<
+    string,
+    { categoryId: string; name: string; type: "INCOME" | "EXPENSE"; total: number }
+  >();
+  let prevExpense = 0;
+  for (const t of historyTransactions) {
+    if (t.date.getUTCFullYear() !== prevYear || t.date.getUTCMonth() + 1 !== prevMonth) continue;
+    const amount = t.amount.toNumber();
+    if (t.category.type === "EXPENSE") prevExpense += amount;
+    const entry = prevByCategory.get(t.categoryId) ?? {
+      categoryId: t.categoryId,
+      name: t.category.name,
+      type: t.category.type,
+      total: 0,
+    };
+    entry.total += amount;
+    prevByCategory.set(t.categoryId, entry);
+  }
+
+  // La proyección de presupuestos solo aplica al mes en curso; para meses
+  // pasados se considera el mes completo (y por tanto no proyecta nada).
+  const now = new Date();
+  const isCurrentMonth = now.getUTCFullYear() === year && now.getUTCMonth() + 1 === month;
+  const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+
+  const insights = buildInsights({
+    income: summary.income,
+    expense: summary.expense,
+    byCategory: summary.byCategory.map((c) => ({
+      ...c,
+      type: c.type as "INCOME" | "EXPENSE",
+    })),
+    prevExpense,
+    prevByCategory: [...prevByCategory.values()],
+    budgets: summary.budgets.map((b) => ({ name: b.name, limit: b.limit, spent: b.spent })),
+    dayOfMonth: isCurrentMonth ? now.getUTCDate() : daysInMonth,
+    daysInMonth,
+  });
+
+  res.json({ year, month, ...summary, history, insights });
 });
 
 export default router;

@@ -13,6 +13,7 @@ Aplicación web full-stack para llevar el control de un presupuesto mensual: ing
 - **Modo oscuro** con toggle persistente (respeta la preferencia del sistema por defecto, sin flash al cargar).
 - **Transacciones recurrentes** (renta, suscripciones, salario): reglas con día del mes, pausa/reactivación, y generación automática por *materialización perezosa* — al consultar datos, el backend crea las ocurrencias pendientes, con catch-up de meses perdidos aunque el servidor haya estado apagado.
 - **Metas de ahorro**: monto objetivo y mes límite, con aportes manuales; la app calcula cuánto apartar al mes y si vas en camino (contra el ritmo lineal esperado), atrasado, o si la meta venció.
+- **Insights automáticos** en el dashboard: cambios significativos por categoría vs. el mes anterior, gastos nuevos, variación del gasto total, tasa de ahorro, proyección de presupuestos al ritmo actual y concentración del gasto — con umbrales relativos para evitar ruido.
 - **Exportar a CSV** el mes visible (UTF-8 con BOM, compatible con Excel).
 - Moneda en **pesos chilenos (CLP)**, configurable en `frontend/src/lib/format.ts`.
 
@@ -87,5 +88,4 @@ Todas las rutas (excepto auth) requieren `Authorization: Bearer <token>`.
 
 ## Roadmap
 
-- [ ] Insights automáticos ("gastaste 30% más en comida que el mes pasado")
 - [ ] Despliegue (Vercel + Railway/Render)

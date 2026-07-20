@@ -22,6 +22,8 @@ model User {
   transactions Transaction[]
   budgets      Budget[]
   recurring    RecurringTransaction[]
+  goals        SavingsGoal[]
+  contributions GoalContribution[]
 }
 
 model Category {
@@ -52,6 +54,29 @@ model Transaction {
   createdAt   DateTime              @default(now())
 
   @@index([userId, date])
+}
+
+model SavingsGoal {
+  id            String             @id @default(cuid())
+  name          String
+  targetAmount  Decimal            @db.Decimal(12, 2)
+  targetYear    Int
+  targetMonth   Int
+  createdAt     DateTime           @default(now())
+  userId        String
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contributions GoalContribution[]
+}
+
+model GoalContribution {
+  id        String      @id @default(cuid())
+  amount    Decimal     @db.Decimal(12, 2)
+  note      String      @default("")
+  date      DateTime    @default(now())
+  goalId    String
+  goal      SavingsGoal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model RecurringTransaction {

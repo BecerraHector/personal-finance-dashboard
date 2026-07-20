@@ -5,6 +5,7 @@ import categoriesRouter from "./routes/categories.js";
 import transactionsRouter from "./routes/transactions.js";
 import budgetsRouter from "./routes/budgets.js";
 import recurringRouter from "./routes/recurring.js";
+import goalsRouter from "./routes/goals.js";
 import summaryRouter from "./routes/summary.js";
 import { requireAuth } from "./middleware/auth.js";
 import { errorHandler } from "./middleware/error.js";
@@ -20,6 +21,7 @@ export function createApp() {
   app.use("/api/transactions", requireAuth, transactionsRouter);
   app.use("/api/budgets", requireAuth, budgetsRouter);
   app.use("/api/recurring", requireAuth, recurringRouter);
+  app.use("/api/goals", requireAuth, goalsRouter);
   app.use("/api/summary", requireAuth, summaryRouter);
 
   app.use(errorHandler);

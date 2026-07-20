@@ -8,6 +8,7 @@ import {
   Repeat,
   Sun,
   Tags,
+  Target,
   Wallet,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext.tsx";
@@ -18,6 +19,7 @@ const links = [
   { to: "/transacciones", label: "Transacciones", icon: List },
   { to: "/presupuestos", label: "Presupuestos", icon: PiggyBank },
   { to: "/recurrentes", label: "Recurrentes", icon: Repeat },
+  { to: "/metas", label: "Metas", icon: Target },
   { to: "/categorias", label: "Categorías", icon: Tags },
 ];
 

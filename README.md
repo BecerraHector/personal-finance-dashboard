@@ -12,6 +12,7 @@ Aplicación web full-stack para llevar el control de un presupuesto mensual: ing
 - **Tests unitarios** (Vitest) de la lógica de resumen, presupuestos y fechas: `npm test` en `backend/` y `frontend/`.
 - **Modo oscuro** con toggle persistente (respeta la preferencia del sistema por defecto, sin flash al cargar).
 - **Transacciones recurrentes** (renta, suscripciones, salario): reglas con día del mes, pausa/reactivación, y generación automática por *materialización perezosa* — al consultar datos, el backend crea las ocurrencias pendientes, con catch-up de meses perdidos aunque el servidor haya estado apagado.
+- **Metas de ahorro**: monto objetivo y mes límite, con aportes manuales; la app calcula cuánto apartar al mes y si vas en camino (contra el ritmo lineal esperado), atrasado, o si la meta venció.
 - **Exportar a CSV** el mes visible (UTF-8 con BOM, compatible con Excel).
 - Moneda en **pesos chilenos (CLP)**, configurable en `frontend/src/lib/format.ts`.
 
@@ -78,12 +79,13 @@ Abre http://localhost:5173 y crea una cuenta (o usa `demo@demo.com` / `demo12345
 | GET | `/api/transactions/export?year&month` | Descarga el mes como CSV |
 | GET/POST/DELETE | `/api/budgets?year&month` | Límites mensuales por categoría (upsert) |
 | GET/POST/PUT/DELETE | `/api/recurring` | Reglas de transacciones recurrentes |
+| GET/POST/PUT/DELETE | `/api/goals` | Metas de ahorro (con progreso calculado) |
+| POST/DELETE | `/api/goals/:id/contributions` | Aportes a una meta |
 | GET | `/api/summary?year&month` | Balance, totales por categoría, presupuestos e historial de 6 meses |
 
 Todas las rutas (excepto auth) requieren `Authorization: Bearer <token>`.
 
 ## Roadmap
 
-- [ ] Metas de ahorro con seguimiento mensual
 - [ ] Insights automáticos ("gastaste 30% más en comida que el mes pasado")
 - [ ] Despliegue (Vercel + Railway/Render)

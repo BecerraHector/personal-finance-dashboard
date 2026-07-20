@@ -43,6 +43,31 @@ export interface Budget {
   category: Category;
 }
 
+export type GoalStatus = "COMPLETED" | "ON_TRACK" | "BEHIND" | "OVERDUE";
+
+export interface GoalContribution {
+  id: string;
+  amount: number;
+  note: string;
+  date: string;
+}
+
+export interface SavingsGoal {
+  id: string;
+  name: string;
+  targetAmount: number;
+  targetYear: number;
+  targetMonth: number;
+  createdAt: string;
+  contributions: GoalContribution[];
+  saved: number;
+  remaining: number;
+  pct: number;
+  monthsLeft: number;
+  suggestedMonthly: number;
+  status: GoalStatus;
+}
+
 export interface Summary {
   year: number;
   month: number;

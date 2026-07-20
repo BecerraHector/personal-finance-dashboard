@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage.tsx";
 import TransactionsPage from "./pages/TransactionsPage.tsx";
 import BudgetsPage from "./pages/BudgetsPage.tsx";
 import RecurringPage from "./pages/RecurringPage.tsx";
+import GoalsPage from "./pages/GoalsPage.tsx";
 import CategoriesPage from "./pages/CategoriesPage.tsx";
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
         <Route path="/transacciones" element={<TransactionsPage />} />
         <Route path="/presupuestos" element={<BudgetsPage />} />
         <Route path="/recurrentes" element={<RecurringPage />} />
+        <Route path="/metas" element={<GoalsPage />} />
         <Route path="/categorias" element={<CategoriesPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -9,6 +9,7 @@ Aplicación web full-stack para llevar el control de un presupuesto mensual: ing
 - **Categorías personalizables** con colores de una paleta accesible (validada para daltonismo).
 - **Presupuestos por categoría**: límite mensual con barra de progreso y alerta al excederse.
 - **Dashboard mensual**: balance del mes, gastos por categoría (dona), evolución de ingresos vs. gastos de los últimos 6 meses (barras) y progreso de presupuestos.
+- **Tests unitarios** (Vitest) de la lógica de resumen, presupuestos y fechas: `npm test` en `backend/` y `frontend/`.
 
 ## Stack
 
@@ -80,7 +81,6 @@ Todas las rutas (excepto auth) requieren `Authorization: Bearer <token>`.
 - [ ] Transacciones recurrentes (renta, suscripciones, salario)
 - [ ] Exportar transacciones a CSV
 - [ ] Metas de ahorro con seguimiento mensual
-- [ ] Tests unitarios de la lógica de resumen y presupuestos
 - [ ] Insights automáticos ("gastaste 30% más en comida que el mes pasado")
 - [ ] Modo oscuro
 - [ ] Despliegue (Vercel + Railway/Render)

@@ -1,20 +1,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { monthLabel } from "../lib/format.ts";
+import { shiftMonth, type YearMonth } from "../lib/month.ts";
 
-export interface YearMonth {
-  year: number;
-  month: number;
-}
-
-export function currentYearMonth(): YearMonth {
-  const now = new Date();
-  return { year: now.getFullYear(), month: now.getMonth() + 1 };
-}
-
-export function shiftMonth({ year, month }: YearMonth, delta: number): YearMonth {
-  const d = new Date(year, month - 1 + delta, 1);
-  return { year: d.getFullYear(), month: d.getMonth() + 1 };
-}
+export { currentYearMonth, shiftMonth, type YearMonth } from "../lib/month.ts";
 
 export default function MonthPicker({
   value,

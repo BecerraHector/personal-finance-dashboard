@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Download, Plus, Trash2 } from "lucide-react";
+import { Download, Plus, Repeat, Trash2 } from "lucide-react";
 import { api, apiErrorMessage } from "../api/client.ts";
 import type { Category, Transaction } from "../api/types.ts";
 import { LOCALE, formatMoney } from "../lib/format.ts";
@@ -204,7 +204,15 @@ export default function TransactionsPage() {
                         aria-hidden
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium">{t.category.name}</p>
+                        <p className="flex items-center gap-1.5 truncate text-sm font-medium">
+                          {t.category.name}
+                          {t.recurringId && (
+                            <Repeat
+                              className="size-3 shrink-0 text-(--ink-muted)"
+                              aria-label="Generada por regla recurrente"
+                            />
+                          )}
+                        </p>
                         {t.description && (
                           <p className="truncate text-xs text-(--ink-muted)">{t.description}</p>
                         )}

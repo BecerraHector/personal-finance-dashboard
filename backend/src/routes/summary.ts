@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "../lib/prisma.js";
 import { monthRange } from "../lib/dates.js";
 import { buildHistory, buildMonthSummary } from "../lib/summary.js";
+import { materializeRecurring } from "../lib/materializeRecurring.js";
 
 const router = Router();
 
@@ -15,6 +16,7 @@ const HISTORY_MONTHS = 6;
 
 router.get("/", async (req, res) => {
   const { year, month } = querySchema.parse(req.query);
+  await materializeRecurring(req.userId);
   const { start, end } = monthRange(year, month);
   const historyStart = new Date(Date.UTC(year, month - HISTORY_MONTHS, 1));
 

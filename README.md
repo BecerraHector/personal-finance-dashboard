@@ -11,6 +11,7 @@ Aplicación web full-stack para llevar el control de un presupuesto mensual: ing
 - **Dashboard mensual**: balance del mes, gastos por categoría (dona), evolución de ingresos vs. gastos de los últimos 6 meses (barras) y progreso de presupuestos.
 - **Tests unitarios** (Vitest) de la lógica de resumen, presupuestos y fechas: `npm test` en `backend/` y `frontend/`.
 - **Modo oscuro** con toggle persistente (respeta la preferencia del sistema por defecto, sin flash al cargar).
+- **Transacciones recurrentes** (renta, suscripciones, salario): reglas con día del mes, pausa/reactivación, y generación automática por *materialización perezosa* — al consultar datos, el backend crea las ocurrencias pendientes, con catch-up de meses perdidos aunque el servidor haya estado apagado.
 - **Exportar a CSV** el mes visible (UTF-8 con BOM, compatible con Excel).
 - Moneda en **pesos chilenos (CLP)**, configurable en `frontend/src/lib/format.ts`.
 
@@ -76,13 +77,13 @@ Abre http://localhost:5173 y crea una cuenta (o usa `demo@demo.com` / `demo12345
 | GET/POST/PUT/DELETE | `/api/transactions?year&month` | CRUD de transacciones por mes |
 | GET | `/api/transactions/export?year&month` | Descarga el mes como CSV |
 | GET/POST/DELETE | `/api/budgets?year&month` | Límites mensuales por categoría (upsert) |
+| GET/POST/PUT/DELETE | `/api/recurring` | Reglas de transacciones recurrentes |
 | GET | `/api/summary?year&month` | Balance, totales por categoría, presupuestos e historial de 6 meses |
 
 Todas las rutas (excepto auth) requieren `Authorization: Bearer <token>`.
 
 ## Roadmap
 
-- [ ] Transacciones recurrentes (renta, suscripciones, salario)
 - [ ] Metas de ahorro con seguimiento mensual
 - [ ] Insights automáticos ("gastaste 30% más en comida que el mes pasado")
 - [ ] Despliegue (Vercel + Railway/Render)

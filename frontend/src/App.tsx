@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import DashboardPage from "./pages/DashboardPage.tsx";
 import TransactionsPage from "./pages/TransactionsPage.tsx";
 import BudgetsPage from "./pages/BudgetsPage.tsx";
+import RecurringPage from "./pages/RecurringPage.tsx";
 import CategoriesPage from "./pages/CategoriesPage.tsx";
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/transacciones" element={<TransactionsPage />} />
         <Route path="/presupuestos" element={<BudgetsPage />} />
+        <Route path="/recurrentes" element={<RecurringPage />} />
         <Route path="/categorias" element={<CategoriesPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

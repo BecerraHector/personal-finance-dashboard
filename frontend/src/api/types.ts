@@ -20,6 +20,18 @@ export interface Transaction {
   date: string;
   categoryId: string;
   category: Category;
+  recurringId: string | null;
+}
+
+export interface RecurringRule {
+  id: string;
+  amount: string;
+  description: string;
+  dayOfMonth: number;
+  active: boolean;
+  startDate: string;
+  categoryId: string;
+  category: Category;
 }
 
 export interface Budget {

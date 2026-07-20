@@ -4,6 +4,7 @@ import { prisma } from "../lib/prisma.js";
 import { HttpError } from "../middleware/error.js";
 import { monthRange } from "../lib/dates.js";
 import { transactionsToCsv } from "../lib/csv.js";
+import { materializeRecurring } from "../lib/materializeRecurring.js";
 
 const router = Router();
 
@@ -28,6 +29,7 @@ async function ownedCategory(userId: string, categoryId: string) {
 
 router.get("/", async (req, res) => {
   const { year, month, categoryId } = listQuerySchema.parse(req.query);
+  await materializeRecurring(req.userId);
   const { start, end } = monthRange(year, month);
   const transactions = await prisma.transaction.findMany({
     where: {
@@ -43,6 +45,7 @@ router.get("/", async (req, res) => {
 
 router.get("/export", async (req, res) => {
   const { year, month, categoryId } = listQuerySchema.parse(req.query);
+  await materializeRecurring(req.userId);
   const { start, end } = monthRange(year, month);
   const transactions = await prisma.transaction.findMany({
     where: {

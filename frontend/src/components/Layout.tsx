@@ -1,5 +1,15 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, List, LogOut, Moon, PiggyBank, Sun, Tags, Wallet } from "lucide-react";
+import {
+  LayoutDashboard,
+  List,
+  LogOut,
+  Moon,
+  PiggyBank,
+  Repeat,
+  Sun,
+  Tags,
+  Wallet,
+} from "lucide-react";
 import { useAuth } from "../context/AuthContext.tsx";
 import { useTheme } from "../context/ThemeContext.tsx";
 
@@ -7,6 +17,7 @@ const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/transacciones", label: "Transacciones", icon: List },
   { to: "/presupuestos", label: "Presupuestos", icon: PiggyBank },
+  { to: "/recurrentes", label: "Recurrentes", icon: Repeat },
   { to: "/categorias", label: "Categorías", icon: Tags },
 ];
 

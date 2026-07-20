@@ -4,6 +4,8 @@ import { Trash2 } from "lucide-react";
 import { api, apiErrorMessage } from "../api/client.ts";
 import type { Budget, Category, Summary } from "../api/types.ts";
 import { formatMoney } from "../lib/format.ts";
+import { categoryColor } from "../lib/palette.ts";
+import { useTheme } from "../context/ThemeContext.tsx";
 import MonthPicker, { currentYearMonth } from "../components/MonthPicker.tsx";
 import { Button, Card, ErrorText, Field, Input, Select } from "../components/ui.tsx";
 
@@ -12,6 +14,7 @@ export default function BudgetsPage() {
   const [form, setForm] = useState({ categoryId: "", limitAmount: "" });
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
+  const dark = useTheme().theme === "dark";
 
   const { data: categories = [] } = useQuery({
     queryKey: ["categories"],
@@ -69,7 +72,7 @@ export default function BudgetsPage() {
       </div>
 
       <Card>
-        <h2 className="mb-4 text-sm font-medium text-[--ink-secondary]">
+        <h2 className="mb-4 text-sm font-medium text-(--ink-secondary)">
           Definir límite mensual por categoría
         </h2>
         <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-3">
@@ -107,10 +110,10 @@ export default function BudgetsPage() {
       </Card>
 
       {isLoading ? (
-        <p className="text-[--ink-muted]">Cargando presupuestos…</p>
+        <p className="text-(--ink-muted)">Cargando presupuestos…</p>
       ) : budgets.length === 0 ? (
         <Card>
-          <p className="py-8 text-center text-sm text-[--ink-muted]">
+          <p className="py-8 text-center text-sm text-(--ink-muted)">
             No hay presupuestos para este mes. Define el primero arriba.
           </p>
         </Card>
@@ -129,21 +132,21 @@ export default function BudgetsPage() {
                       <span className="flex items-center gap-2">
                         <span
                           className="size-2.5 rounded-full"
-                          style={{ background: b.category.color }}
+                          style={{ background: categoryColor(b.category.color, dark) }}
                           aria-hidden
                         />
                         {b.category.name}
                       </span>
-                      <span className="tabular-nums text-[--ink-secondary]">
+                      <span className="tabular-nums text-(--ink-secondary)">
                         {formatMoney(spent)} / {formatMoney(limit)} ({Math.round(pct)}%)
                       </span>
                     </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-black/10">
+                    <div className="h-2 overflow-hidden rounded-full bg-(--hover)">
                       <div
                         className="h-full rounded-full"
                         style={{
                           width: `${Math.min(pct, 100)}%`,
-                          background: over ? "#d03b3b" : b.category.color,
+                          background: over ? "var(--danger)" : categoryColor(b.category.color, dark),
                         }}
                       />
                     </div>
@@ -151,7 +154,7 @@ export default function BudgetsPage() {
                   <button
                     aria-label="Eliminar presupuesto"
                     onClick={() => deleteMutation.mutate(b.id)}
-                    className="rounded-md p-1.5 text-[--ink-muted] hover:bg-[#d03b3b]/10 hover:text-[#d03b3b]"
+                    className="rounded-md p-1.5 text-(--ink-muted) hover:bg-(--danger-soft) hover:text-(--danger)"
                   >
                     <Trash2 className="size-4" />
                   </button>

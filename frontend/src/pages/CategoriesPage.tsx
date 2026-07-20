@@ -4,18 +4,8 @@ import { Plus, Trash2 } from "lucide-react";
 import { api, apiErrorMessage } from "../api/client.ts";
 import type { Category, TransactionType } from "../api/types.ts";
 import { Button, Card, ErrorText, Field, Input, Select } from "../components/ui.tsx";
-
-// Slots de la paleta categórica validada (CVD-safe), en su orden canónico
-const PALETTE = [
-  "#2a78d6",
-  "#008300",
-  "#e87ba4",
-  "#eda100",
-  "#1baf7a",
-  "#eb6834",
-  "#4a3aa7",
-  "#e34948",
-];
+import { PALETTE, categoryColor } from "../lib/palette.ts";
+import { useTheme } from "../context/ThemeContext.tsx";
 
 export default function CategoriesPage() {
   const [form, setForm] = useState<{ name: string; type: TransactionType; color: string }>({
@@ -25,6 +15,7 @@ export default function CategoriesPage() {
   });
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
+  const dark = useTheme().theme === "dark";
 
   const { data: categories = [], isLoading } = useQuery({
     queryKey: ["categories"],
@@ -66,23 +57,23 @@ export default function CategoriesPage() {
   function CategoryList({ title, items }: { title: string; items: Category[] }) {
     return (
       <Card>
-        <h2 className="mb-3 text-sm font-medium text-[--ink-secondary]">{title}</h2>
+        <h2 className="mb-3 text-sm font-medium text-(--ink-secondary)">{title}</h2>
         {items.length === 0 ? (
-          <p className="py-4 text-center text-sm text-[--ink-muted]">Sin categorías</p>
+          <p className="py-4 text-center text-sm text-(--ink-muted)">Sin categorías</p>
         ) : (
-          <ul className="divide-y divide-[--gridline]">
+          <ul className="divide-y divide-(--gridline)">
             {items.map((c) => (
               <li key={c.id} className="flex items-center gap-3 py-2.5">
                 <span
                   className="size-3 shrink-0 rounded-full"
-                  style={{ background: c.color }}
+                  style={{ background: categoryColor(c.color, dark) }}
                   aria-hidden
                 />
                 <span className="flex-1 truncate text-sm">{c.name}</span>
                 <button
                   aria-label={`Eliminar categoría ${c.name}`}
                   onClick={() => deleteMutation.mutate(c.id)}
-                  className="rounded-md p-1.5 text-[--ink-muted] hover:bg-[#d03b3b]/10 hover:text-[#d03b3b]"
+                  className="rounded-md p-1.5 text-(--ink-muted) hover:bg-(--danger-soft) hover:text-(--danger)"
                 >
                   <Trash2 className="size-4" />
                 </button>
@@ -126,9 +117,11 @@ export default function CategoriesPage() {
                   aria-label={`Color ${hex}`}
                   onClick={() => setForm({ ...form, color: hex })}
                   className={`size-6 rounded-full transition-transform ${
-                    form.color === hex ? "scale-110 ring-2 ring-offset-1 ring-[--ink-secondary]" : ""
+                    form.color === hex
+                      ? "scale-110 ring-2 ring-(--ink-secondary) ring-offset-1 ring-offset-(--surface-1)"
+                      : ""
                   }`}
-                  style={{ background: hex }}
+                  style={{ background: categoryColor(hex, dark) }}
                 />
               ))}
             </div>
@@ -144,7 +137,7 @@ export default function CategoriesPage() {
       </Card>
 
       {isLoading ? (
-        <p className="text-[--ink-muted]">Cargando categorías…</p>
+        <p className="text-(--ink-muted)">Cargando categorías…</p>
       ) : (
         <div className="grid gap-4 lg:grid-cols-2">
           <CategoryList title="Ingresos" items={incomeCategories} />

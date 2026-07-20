@@ -1,14 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --surface-1: #fcfcfb;
   --page: #f9f9f7;
+  --surface-1: #fcfcfb;
+  --field: #ffffff;
   --ink-primary: #0b0b0b;
   --ink-secondary: #52514e;
   --ink-muted: #898781;
   --gridline: #e1e0d9;
+  --card-border: rgba(11, 11, 11, 0.1);
+  --hover: rgba(0, 0, 0, 0.05);
+  --accent: #2a78d6;
+  --accent-hover: #1c5cab;
+  --accent-text: #1c5cab;
+  --accent-soft: rgba(42, 120, 214, 0.1);
   --income: #006300;
-  --expense: #d03b3b;
+  --danger: #d03b3b;
+  --danger-soft: rgba(208, 59, 59, 0.1);
+  color-scheme: light;
+}
+
+html.dark {
+  --page: #0d0d0d;
+  --surface-1: #1a1a19;
+  --field: #232322;
+  --ink-primary: #ffffff;
+  --ink-secondary: #c3c2b7;
+  --ink-muted: #898781;
+  --gridline: #2c2c2a;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --hover: rgba(255, 255, 255, 0.08);
+  --accent: #3987e5;
+  --accent-hover: #5598e7;
+  --accent-text: #86b6ef;
+  --accent-soft: rgba(57, 135, 229, 0.18);
+  --income: #0ca30c;
+  --danger: #e66767;
+  --danger-soft: rgba(230, 103, 103, 0.15);
+  color-scheme: dark;
 }
 
 body {

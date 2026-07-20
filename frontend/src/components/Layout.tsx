@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, List, LogOut, PiggyBank, Tags, Wallet } from "lucide-react";
+import { LayoutDashboard, List, LogOut, Moon, PiggyBank, Sun, Tags, Wallet } from "lucide-react";
 import { useAuth } from "../context/AuthContext.tsx";
+import { useTheme } from "../context/ThemeContext.tsx";
 
 const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -11,12 +12,13 @@ const links = [
 
 export default function Layout() {
   const { user, logout } = useAuth();
+  const { theme, toggle } = useTheme();
 
   return (
     <div className="flex min-h-screen">
-      <aside className="flex w-56 shrink-0 flex-col border-r border-[--gridline] bg-[--surface-1] p-4">
+      <aside className="flex w-56 shrink-0 flex-col border-r border-(--gridline) bg-(--surface-1) p-4">
         <div className="mb-8 flex items-center gap-2 px-2 text-lg font-semibold">
-          <Wallet className="size-6 text-[#2a78d6]" aria-hidden />
+          <Wallet className="size-6 text-(--accent)" aria-hidden />
           Presupuestador
         </div>
         <nav className="flex flex-col gap-1">
@@ -28,8 +30,8 @@ export default function Layout() {
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                   isActive
-                    ? "bg-[#2a78d6]/10 font-medium text-[#1c5cab]"
-                    : "text-[--ink-secondary] hover:bg-black/5"
+                    ? "bg-(--accent-soft) font-medium text-(--accent-text)"
+                    : "text-(--ink-secondary) hover:bg-(--hover)"
                 }`
               }
             >
@@ -38,12 +40,23 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className="mt-auto border-t border-[--gridline] pt-4">
+        <div className="mt-auto border-t border-(--gridline) pt-4">
+          <button
+            onClick={toggle}
+            className="mb-3 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-(--ink-secondary) hover:bg-(--hover)"
+          >
+            {theme === "dark" ? (
+              <Sun className="size-4" aria-hidden />
+            ) : (
+              <Moon className="size-4" aria-hidden />
+            )}
+            {theme === "dark" ? "Modo claro" : "Modo oscuro"}
+          </button>
           <p className="truncate px-2 text-sm font-medium">{user?.name}</p>
-          <p className="truncate px-2 text-xs text-[--ink-muted]">{user?.email}</p>
+          <p className="truncate px-2 text-xs text-(--ink-muted)">{user?.email}</p>
           <button
             onClick={logout}
-            className="mt-3 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-[--ink-secondary] hover:bg-black/5"
+            className="mt-3 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-(--ink-secondary) hover:bg-(--hover)"
           >
             <LogOut className="size-4" aria-hidden />
             Cerrar sesión

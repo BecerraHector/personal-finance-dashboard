@@ -5,6 +5,14 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Presupuestador</title>
+    <script>
+      // Aplica el tema antes de que cargue React para evitar el flash claro
+      const t = localStorage.getItem("presupuestador_theme");
+      document.documentElement.classList.toggle(
+        "dark",
+        t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches,
+      );
+    </script>
   </head>
   <body>
     <div id="root"></div>

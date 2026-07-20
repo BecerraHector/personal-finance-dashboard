@@ -4,6 +4,8 @@ import { Plus, Trash2 } from "lucide-react";
 import { api, apiErrorMessage } from "../api/client.ts";
 import type { Category, Transaction } from "../api/types.ts";
 import { formatMoney } from "../lib/format.ts";
+import { categoryColor } from "../lib/palette.ts";
+import { useTheme } from "../context/ThemeContext.tsx";
 import MonthPicker, { currentYearMonth } from "../components/MonthPicker.tsx";
 import { Button, Card, ErrorText, Field, Input, Select } from "../components/ui.tsx";
 
@@ -17,6 +19,7 @@ export default function TransactionsPage() {
   const [error, setError] = useState("");
   const [form, setForm] = useState({ amount: "", description: "", date: todayISO(), categoryId: "" });
   const queryClient = useQueryClient();
+  const dark = useTheme().theme === "dark";
 
   const { data: categories = [] } = useQuery({
     queryKey: ["categories"],
@@ -148,10 +151,10 @@ export default function TransactionsPage() {
       )}
 
       {isLoading ? (
-        <p className="text-[--ink-muted]">Cargando transacciones…</p>
+        <p className="text-(--ink-muted)">Cargando transacciones…</p>
       ) : grouped.length === 0 ? (
         <Card>
-          <p className="py-8 text-center text-sm text-[--ink-muted]">
+          <p className="py-8 text-center text-sm text-(--ink-muted)">
             No hay transacciones en este mes. Registra la primera con «Nueva».
           </p>
         </Card>
@@ -159,32 +162,32 @@ export default function TransactionsPage() {
         <div className="space-y-4">
           {grouped.map(([date, items]) => (
             <Card key={date}>
-              <h2 className="mb-3 text-sm font-medium text-[--ink-secondary]">
+              <h2 className="mb-3 text-sm font-medium text-(--ink-secondary)">
                 {new Date(`${date}T00:00:00`).toLocaleDateString("es-MX", {
                   weekday: "long",
                   day: "numeric",
                   month: "long",
                 })}
               </h2>
-              <ul className="divide-y divide-[--gridline]">
+              <ul className="divide-y divide-(--gridline)">
                 {items.map((t) => {
                   const isIncome = t.category.type === "INCOME";
                   return (
                     <li key={t.id} className="flex items-center gap-3 py-2.5">
                       <span
                         className="size-2.5 shrink-0 rounded-full"
-                        style={{ background: t.category.color }}
+                        style={{ background: categoryColor(t.category.color, dark) }}
                         aria-hidden
                       />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{t.category.name}</p>
                         {t.description && (
-                          <p className="truncate text-xs text-[--ink-muted]">{t.description}</p>
+                          <p className="truncate text-xs text-(--ink-muted)">{t.description}</p>
                         )}
                       </div>
                       <span
                         className={`tabular-nums text-sm font-semibold ${
-                          isIncome ? "text-[#006300]" : "text-[--ink-primary]"
+                          isIncome ? "text-(--income)" : "text-(--ink-primary)"
                         }`}
                       >
                         {isIncome ? "+" : "−"}
@@ -193,7 +196,7 @@ export default function TransactionsPage() {
                       <button
                         aria-label="Eliminar transacción"
                         onClick={() => deleteMutation.mutate(t.id)}
-                        className="rounded-md p-1.5 text-[--ink-muted] hover:bg-[#d03b3b]/10 hover:text-[#d03b3b]"
+                        className="rounded-md p-1.5 text-(--ink-muted) hover:bg-(--danger-soft) hover:text-(--danger)"
                       >
                         <Trash2 className="size-4" />
                       </button>

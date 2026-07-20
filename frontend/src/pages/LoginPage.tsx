@@ -29,7 +29,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <div className="mb-6 flex items-center justify-center gap-2 text-xl font-semibold">
-          <Wallet className="size-6 text-[#2a78d6]" aria-hidden />
+          <Wallet className="size-6 text-(--accent)" aria-hidden />
           Presupuestador
         </div>
         <form onSubmit={onSubmit} className="space-y-4">
@@ -56,9 +56,9 @@ export default function LoginPage() {
             {submitting ? "Entrando…" : "Iniciar sesión"}
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm text-[--ink-secondary]">
+        <p className="mt-4 text-center text-sm text-(--ink-secondary)">
           ¿No tienes cuenta?{" "}
-          <Link to="/register" className="font-medium text-[#1c5cab] hover:underline">
+          <Link to="/register" className="font-medium text-(--accent-text) hover:underline">
             Regístrate
           </Link>
         </p>

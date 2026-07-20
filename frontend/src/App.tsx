@@ -13,7 +13,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-[--ink-muted]">
+      <div className="flex min-h-screen items-center justify-center text-(--ink-muted)">
         Cargando…
       </div>
     );

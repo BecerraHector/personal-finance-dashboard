@@ -88,4 +88,25 @@ Todas las rutas (excepto auth) requieren `Authorization: Bearer <token>`.
 
 ## Roadmap
 
+Antes de desplegar a producción:
+
+**Crítico**
+
+- [ ] Corregir el interceptor de axios: solo debe cerrar sesión ante un 401 real, no ante errores de red o 500 (hoy desloguea al usuario si el backend está caído o arrancando en frío)
+- [ ] Endurecer el backend: restringir CORS al origen de producción, rate limiting en `/api/auth` (`express-rate-limit`), `JWT_SECRET` obligatorio (sin fallback `dev-secret`), Helmet
+- [ ] Definir arquitectura de despliegue: monolito (Express sirve el build del frontend, un solo servicio/dominio, sin CORS) vs. frontend y backend separados (Vercel + Railway/Render, requiere `VITE_API_URL` y CORS configurado)
+- [ ] Script de seed (`prisma db seed`) para poblar el usuario demo con 3-4 meses de datos de ejemplo
+
+**Recomendado**
+
+- [ ] Sidebar responsive para mobile (hoy es de ancho fijo y se rompe en pantallas chicas)
+- [ ] CI con GitHub Actions: correr los tests y el typecheck en cada push, badge en el README
+- [ ] Screenshots del dashboard en el README (modo claro y oscuro)
+
+**Opcional**
+
+- [ ] Logging estructurado (pino)
+- [ ] Tests de integración con supertest
+- [ ] Paginación de transacciones
+
 - [ ] Despliegue (Vercel + Railway/Render)
